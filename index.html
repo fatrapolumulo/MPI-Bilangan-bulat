@@ -1,0 +1,1616 @@
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    rosepink: {
+                        50: '#fff1f2',
+                        100: '#ffe4e6',
+                        200: '#fecdd3',
+                        300: '#fda4af',
+                        400: '#fb7185',
+                        500: '#f43f5e',
+                        600: '#e11d48',
+                        700: '#be123c',
+                        800: '#9f1239',
+                        900: '#881337',
+                    },
+                    emerald: {
+                        800: '#064e3b',
+                        900: '#022c22'
+                    }
+                },
+                fontFamily: {
+                    sans: ['Inter', 'sans-serif'],
+                    arabic: ['Amiri', 'serif'],
+                }
+            }
+        }
+    }
+</script>
+<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+    }
+    .glass-dark {
+        background: rgba(15, 23, 42, 0.75);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+    .arabic-text {
+        font-family: 'Amiri', serif;
+        line-height: 2.2;
+    }
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #ffe4e6;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #fb7185;
+        border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #e11d48;
+    }
+    @media print {
+        body * {
+            visibility: hidden;
+        }
+        #pdf-report-container, #pdf-report-container * {
+            visibility: visible;
+        }
+        #pdf-report-container {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            background: white;
+            color: black;
+        }
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>
+
+
+<!-- APP CONTAINER -->
+<div id="app" class="relative w-full max-w-6xl mx-auto min-h-screen flex flex-col justify-between p-2 sm:p-4 md:p-6">
+
+    <!-- ========================================== -->
+    <!-- 1. SPLASH SCREEN                           -->
+    <!-- ========================================== -->
+    <div id="splash-screen" class="fixed inset-0 z-50 bg-gradient-to-tr from-rose-600 via-pink-600 to-rose-800 flex flex-col items-center justify-center text-white transition-opacity duration-700">
+        <div class="animate-bounce mb-6 text-center">
+            <div class="w-24 h-24 sm:w-32 sm:h-32 mx-auto bg-white/20 rounded-full flex items-center justify-center backdrop-blur-md border border-white/30 shadow-2xl mb-4">
+                <i class="fa-solid fa-arrow-down-up-across-line text-5xl sm:text-6xl text-white"></i>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight">BILANGAN BULAT</h1>
+            <p class="text-rose-100 text-base sm:text-lg mt-2 font-medium">Media Pembelajaran Interaktif Berbasis Cinta (KBC)</p>
+        </div>
+        <div class="flex items-center space-x-2 text-rose-200 text-sm font-semibold tracking-wider uppercase">
+            <div class="w-3 h-3 bg-white rounded-full animate-ping"></div>
+            <span>Memuat Aplikasi MTs Al-khairaat...</span>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. COVER PAGE                              -->
+    <!-- ========================================== -->
+    <section id="cover-page" class="hidden flex-1 flex flex-col justify-between items-center text-center py-6 px-4">
+        <div class="w-full flex flex-wrap justify-between items-center gap-2 mb-4">
+            <span class="px-4 py-1.5 bg-rose-600 text-white font-bold text-xs sm:text-sm rounded-full shadow-md flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap"></i> MTs / Kelas VII - Fase D
+            </span>
+            <span class="px-4 py-1.5 bg-white/80 backdrop-blur text-rose-800 font-bold text-xs sm:text-sm rounded-full shadow border border-rose-200 flex items-center gap-2">
+                <i class="fa-solid fa-heart text-rose-500"></i> Kurikulum Berbasis Cinta
+            </span>
+        </div>
+
+        <div class="my-auto py-6 max-w-3xl w-full">
+            <div class="relative mx-auto w-40 h-40 sm:w-56 sm:h-56 mb-6">
+                <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-xl animate-pulse">
+                    <circle cx="100" cy="100" r="85" fill="#ffe4e6" stroke="#f43f5e" stroke-width="4" />
+                    <line x1="25" y1="100" x2="175" y2="100" stroke="#be123c" stroke-width="5" stroke-linecap="round"/>
+                    <circle cx="50" cy="100" r="7" fill="#be123c" />
+                    <text x="50" y="130" text-anchor="middle" font-weight="bold" fill="#9f1239" font-size="16">-50</text>
+                    <circle cx="100" cy="100" r="9" fill="#064e3b" />
+                    <text x="100" y="130" text-anchor="middle" font-weight="bold" fill="#064e3b" font-size="18">0</text>
+                    <circle cx="150" cy="100" r="7" fill="#be123c" />
+                    <text x="150" y="130" text-anchor="middle" font-weight="bold" fill="#9f1239" font-size="16">+50</text>
+                    <path d="M 70 75 L 100 35 L 130 75 Z" fill="#fb7185" opacity="0.7"/>
+                    <path d="M 88 50 L 100 35 L 112 50 Z" fill="#ffffff" />
+                </svg>
+            </div>
+
+            <h1 class="text-3xl sm:text-5xl md:text-6xl font-black text-slate-900 tracking-tight mb-3">
+                BILANGAN BULAT
+            </h1>
+            <p class="text-slate-600 text-sm sm:text-lg max-w-xl mx-auto font-medium leading-relaxed">
+                Eksplorasi Konsep Bilangan Bulat, Rasional, dan Desimal Terintegrasi Ekosistem Gunung Pani Pohuwato & Nilai-Nilai Al-Qur'an.
+            </p>
+        </div>
+
+        <div class="w-full max-w-md space-y-3 mb-4">
+            <button onclick="openModal('developer-modal')" class="w-full py-3 px-5 bg-white hover:bg-rose-50 text-rose-700 font-bold rounded-xl shadow-md border border-rose-200 transition transform active:scale-95 flex items-center justify-center gap-3">
+                <i class="fa-solid fa-id-card text-rose-500"></i> Informasi Pengembang
+            </button>
+            <button onclick="openModal('objective-modal')" class="w-full py-3 px-5 bg-white hover:bg-rose-50 text-rose-700 font-bold rounded-xl shadow-md border border-rose-200 transition transform active:scale-95 flex items-center justify-center gap-3">
+                <i class="fa-solid fa-bullseye text-rose-500"></i> Tujuan Pembelajaran
+            </button>
+            <button onclick="goToIdentityForm()" class="w-full py-4 px-6 bg-gradient-to-r from-rose-600 to-pink-600 hover:from-rose-700 hover:to-pink-700 text-white font-extrabold text-lg rounded-xl shadow-xl transition transform hover:-translate-y-0.5 active:scale-95 flex items-center justify-center gap-3">
+                <span>MULAI BELAJAR</span> <i class="fa-solid fa-circle-arrow-right"></i>
+            </button>
+        </div>
+
+        <p class="text-xs text-slate-500">MTs Al-khairaat Buntulia &copy; 2026 - Pengembang: Fatra Polumulo, S.Pd</p>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- FLOATING SLIDE 1: DEVELOPER MODAL          -->
+    <!-- ========================================== -->
+    <div id="developer-modal" class="hidden fixed inset-0 z-50 glass-dark flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 text-center border-2 border-rose-300 relative animate-fade-in">
+            <button onclick="closeModal('developer-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="w-28 h-28 mx-auto mb-4 rounded-full overflow-hidden border-4 border-rose-500 shadow-md bg-rose-100 flex items-center justify-center">
+                <img src="https://placehold.co/150x150/0F5132/D4AF37?text=Foto+Guru" 
+                     onerror="this.onerror=null; this.src='https://ui-avatars.com/api/?name=Fatra+Polumulo&background=e11d48&color=fff&size=150';" 
+                     alt="Fatra Polumulo, S.Pd" 
+                     class="w-full h-full object-cover">
+            </div>
+            <h3 class="text-2xl font-bold text-slate-800">Fatra Polumulo, S.Pd</h3>
+            <p class="text-rose-600 font-semibold text-sm mb-4">Guru Matematika MTs</p>
+            <div class="bg-rose-50 p-4 rounded-xl text-left space-y-2 text-sm text-slate-700 mb-6">
+                <p class="flex items-center gap-3">
+                    <i class="fa-solid fa-school text-rose-500 w-5"></i>
+                    <span><strong>Instansi:</strong> MTs Al-khairaat Buntulia</span>
+                </p>
+                <p class="flex items-center gap-3">
+                    <i class="fa-solid fa-location-dot text-rose-500 w-5"></i>
+                    <span><strong>Wilayah:</strong> Kab. Pohuwato, Gorontalo</span>
+                </p>
+                <p class="flex items-center gap-3">
+                    <i class="fa-solid fa-envelope text-rose-500 w-5"></i>
+                    <span class="break-all"><strong>Email:</strong> fatrapolumulo80@gmail.com</span>
+                </p>
+                <p class="flex items-center gap-3">
+                    <i class="fa-solid fa-heart text-rose-500 w-5"></i>
+                    <span><strong>Spesialisasi:</strong> Pembelajaran Berbasis Cinta</span>
+                </p>
+            </div>
+            <button onclick="closeModal('developer-modal')" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition">
+                Kembali ke Cover
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- FLOATING SLIDE 2: OBJECTIVES MODAL         -->
+    <!-- ========================================== -->
+    <div id="objective-modal" class="hidden fixed inset-0 z-50 glass-dark flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-lg w-full p-6 text-left border-2 border-rose-300 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeModal('objective-modal')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 p-2">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl font-bold">
+                    <i class="fa-solid fa-bullseye"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800">Tujuan Pembelajaran</h3>
+            </div>
+
+            <div class="bg-rose-50 p-4 rounded-xl text-slate-700 text-sm leading-relaxed mb-4 border-l-4 border-rose-600">
+                "Peserta didik mampu membaca, menulis, mengurutkan, dan membandingkan bilangan bulat, bilangan rasional, dan bilangan desimal secara tepat, bertanggung jawab, dan reflektif sebagai wujud cinta ilmu."
+            </div>
+
+            <div class="bg-emerald-50 p-4 rounded-xl text-slate-800 text-sm leading-relaxed mb-4 border-l-4 border-emerald-600">
+                <div class="flex justify-between items-center mb-1">
+                    <span class="text-xs font-bold uppercase text-emerald-800 tracking-wider">Landasan Al-Qur'an (QS. Al-Qamar: 49)</span>
+                    <i class="fa-solid fa-book-quran text-emerald-600"></i>
+                </div>
+                <p class="arabic-text text-right text-lg font-bold text-emerald-900 my-2">
+                    إِنَّا كُلَّ شَيْءٍ خَلَقْنَاهُ بِقَدَرٍ
+                </p>
+                <p class="italic text-xs text-slate-600 mb-2">"Sungguh, Kami menciptakan segala sesuatu menurut ukuran." (QS. Al-Qamar: 49)</p>
+                <p class="text-xs text-emerald-900 font-medium"><strong>Hikmah KBC:</strong> Segala hal di alam semesta, termasuk ketinggian Gunung Pani Pohuwato hingga suhu udara, diciptakan Allah dengan keteraturan bilangan yang presisi.</p>
+            </div>
+
+            <button onclick="closeModal('objective-modal')" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl transition text-center">
+                Kembali ke Cover
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. STUDENT IDENTITY FORM                   -->
+    <!-- ========================================== -->
+    <section id="identity-page" class="hidden flex-1 flex flex-col justify-center items-center py-6 px-4">
+        <div class="glass-panel p-6 sm:p-8 rounded-3xl shadow-xl max-w-md w-full border border-rose-200">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-3 text-2xl">
+                    <i class="fa-solid fa-user-graduate"></i>
+                </div>
+                <h2 class="text-2xl font-extrabold text-slate-800">Identitas Murid</h2>
+                <p class="text-xs text-slate-500 mt-1">Masukkan data diri sebelum memulai petualangan matematika</p>
+            </div>
+
+            <form onsubmit="saveStudentIdentity(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Nama Lengkap Siswa</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                            <i class="fa-solid fa-user"></i>
+                        </span>
+                        <input type="text" id="student-name" required placeholder="Contoh: Ahmad Raihan" 
+                            class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none transition text-sm font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Kelas / Rombel</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400">
+                            <i class="fa-solid fa-users"></i>
+                        </span>
+                        <select id="student-class" required class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-300 focus:ring-2 focus:ring-rose-500 focus:border-rose-500 outline-none transition text-sm font-medium bg-white">
+                            <option value="">-- Pilih Kelas VII --</option>
+                            <option value="VII A (MTs Al-khairaat)">VII A - MTs Al-khairaat Buntulia</option>
+                            <option value="VII B (MTs Al-khairaat)">VII B - MTs Al-khairaat Buntulia</option>
+                            <option value="VII C (MTs Al-khairaat)">VII C - MTs Al-khairaat Buntulia</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div id="form-error" class="hidden p-3 bg-red-100 text-red-700 rounded-xl text-xs font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>Mohon isi nama dan pilih kelas terlebih dahulu!</span>
+                </div>
+
+                <button type="submit" class="w-full py-3.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl shadow-lg transition active:scale-95 flex items-center justify-center gap-2">
+                    <span>Lanjutkan Ke Panduan</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 4. USER GUIDE SLIDES                       -->
+    <!-- ========================================== -->
+    <section id="guide-page" class="hidden flex-1 flex flex-col justify-between py-4 px-4">
+        <div class="bg-white rounded-3xl shadow-xl p-6 md:p-8 max-w-3xl mx-auto w-full border border-rose-100 flex-1 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between border-b pb-4 mb-6">
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-800">
+                            Selamat Datang, <span id="guide-student-name" class="text-rose-600">Siswa</span>!
+                        </h2>
+                        <p class="text-xs text-slate-500">Panduan Penggunaan Media Pembelajaran Interaktif</p>
+                    </div>
+                    <span class="px-3 py-1 bg-rose-100 text-rose-700 font-bold text-xs rounded-full" id="guide-step-indicator">
+                        Slide 1 dari 3
+                    </span>
+                </div>
+
+                <div id="guide-slide-container" class="min-h-[220px] flex items-center"></div>
+            </div>
+
+            <div class="flex items-center justify-between pt-6 border-t mt-4">
+                <button id="guide-prev-btn" onclick="changeGuideSlide(-1)" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-300 text-sm transition disabled:opacity-50">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Kembali
+                </button>
+                <button id="guide-next-btn" onclick="changeGuideSlide(1)" class="px-5 py-2.5 bg-rose-600 text-white font-bold rounded-xl hover:bg-rose-700 text-sm transition shadow">
+                    Selanjutnya <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 5. MAIN DASHBOARD                          -->
+    <!-- ========================================== -->
+    <section id="dashboard-page" class="hidden flex-1 flex flex-col py-4 px-4">
+        <div class="glass-panel p-4 rounded-2xl shadow-md mb-6 flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 bg-rose-500 text-white rounded-full flex items-center justify-center font-bold text-lg shadow">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <div>
+                    <h3 class="font-extrabold text-slate-800" id="dash-user-name">Nama Siswa</h3>
+                    <p class="text-xs text-slate-500" id="dash-user-class">Kelas VII</p>
+                </div>
+            </div>
+            <div class="flex gap-2 text-xs">
+                <span id="badge-belajar" class="px-3 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-full flex items-center gap-1">
+                    <i class="fa-solid fa-check"></i> Belajar
+                </span>
+                <span id="badge-bermain" class="px-3 py-1 bg-slate-200 text-slate-600 font-bold rounded-full flex items-center gap-1">
+                    <i class="fa-solid fa-lock" id="icon-badge-bermain"></i> Bermain
+                </span>
+                <span id="badge-berlatih" class="px-3 py-1 bg-slate-200 text-slate-600 font-bold rounded-full flex items-center gap-1">
+                    <i class="fa-solid fa-lock" id="icon-badge-berlatih"></i> Berlatih
+                </span>
+            </div>
+        </div>
+
+        <div class="text-center mb-6">
+            <h2 class="text-2xl sm:text-3xl font-black text-slate-800">MENU UTAMA PEMBELAJARAN</h2>
+            <p class="text-xs sm:text-sm text-slate-600 mt-1">Selesaikan alur secara bertahap untuk membuka tantangan berikutnya</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto w-full my-auto">
+            <div onclick="navigateToModule('belajar')" class="cursor-pointer bg-white rounded-3xl p-6 shadow-xl border-2 border-rose-300 hover:border-rose-500 transition transform hover:-translate-y-1 relative overflow-hidden group">
+                <div class="absolute top-3 right-3 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full shadow">
+                    <i class="fa-solid fa-lock-open mr-1"></i> Terbuka
+                </div>
+                <div class="w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition">
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">1. BELAJAR</h3>
+                <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+                    6 Slide Materi Mendalam terintegrasi Konteks Gunung Pani Pohuwato & Nilai Al-Qur'an KBC.
+                </p>
+                <div class="w-full bg-rose-600 text-white font-bold py-2.5 rounded-xl text-center text-sm shadow">
+                    Mulai Belajar Materi
+                </div>
+            </div>
+
+            <div id="card-bermain" onclick="attemptNavigate('bermain')" class="cursor-pointer bg-slate-100 rounded-3xl p-6 shadow-md border-2 border-slate-300 transition relative overflow-hidden group">
+                <div id="status-bermain" class="absolute top-3 right-3 px-3 py-1 bg-slate-400 text-white text-xs font-bold rounded-full shadow">
+                    <i class="fa-solid fa-lock mr-1"></i> Terkunci
+                </div>
+                <div class="w-16 h-16 bg-slate-200 text-slate-500 rounded-2xl flex items-center justify-center text-3xl mb-4" id="icon-box-bermain">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">2. BERMAIN</h3>
+                <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+                    10 Tantangan Gamifikasi Interaktif berbasis Stimulus Literasi & Numerasi Pohuwato.
+                </p>
+                <div id="btn-bermain-ui" class="w-full bg-slate-300 text-slate-600 font-bold py-2.5 rounded-xl text-center text-sm">
+                    Selesaikan Belajar Dulu
+                </div>
+            </div>
+
+            <div id="card-berlatih" onclick="attemptNavigate('berlatih')" class="cursor-pointer bg-slate-100 rounded-3xl p-6 shadow-md border-2 border-slate-300 transition relative overflow-hidden group">
+                <div id="status-berlatih" class="absolute top-3 right-3 px-3 py-1 bg-slate-400 text-white text-xs font-bold rounded-full shadow">
+                    <i class="fa-solid fa-lock mr-1"></i> Terkunci
+                </div>
+                <div class="w-16 h-16 bg-slate-200 text-slate-500 rounded-2xl flex items-center justify-center text-3xl mb-4" id="icon-box-berlatih">
+                    <i class="fa-solid fa-pen-ruler"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-800 mb-2">3. BERLATIH</h3>
+                <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+                    10 Soal Asesmen Berjenjang (Level 1, Level 2, & Level 3 HOTS) dengan Hasil Laporan PDF.
+                </p>
+                <div id="btn-berlatih-ui" class="w-full bg-slate-300 text-slate-600 font-bold py-2.5 rounded-xl text-center text-sm">
+                    Selesaikan Bermain Dulu
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCKED MODULE MODAL -->
+    <div id="locked-modal" class="hidden fixed inset-0 z-50 glass-dark flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center border-2 border-rose-300 animate-fade-in">
+            <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="text-xl font-bold text-slate-800 mb-2">Menu Masih Terkunci!</h3>
+            <p class="text-xs text-slate-600 mb-6 leading-relaxed" id="locked-modal-msg">
+                Siswa yang bijak dan penuh kasih menyukai proses bertahap. Selesaikan tahapan sebelumnya dengan tuntas!
+            </p>
+            <button onclick="closeModal('locked-modal')" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-sm transition">
+                Saya Mengerti
+            </button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 6. LAYER MENU 1: BELAJAR                   -->
+    <!-- ========================================== -->
+    <section id="belajar-page" class="hidden flex-1 flex flex-col py-4 px-2 sm:px-4">
+        <div class="flex justify-between items-center mb-4 bg-white p-3 rounded-2xl shadow-sm border border-rose-100">
+            <button onclick="goToDashboard()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-2">
+                <i class="fa-solid fa-house"></i> Dashboard
+            </button>
+            <span class="text-xs font-extrabold text-rose-600 uppercase tracking-wide">
+                Modul Belajar Materi (<span id="materi-slide-num">1</span>/6)
+            </span>
+            <span class="text-xs font-semibold text-slate-500" id="materi-progress-percent">16%</span>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-xl p-5 sm:p-8 border border-rose-100 flex-1 flex flex-col justify-between max-w-4xl mx-auto w-full overflow-y-auto">
+            <div id="materi-content-area"></div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+                <button id="materi-prev-btn" onclick="changeMateriSlide(-1)" class="px-4 py-2 bg-slate-200 text-slate-700 font-semibold rounded-xl text-sm hover:bg-slate-300 disabled:opacity-50">
+                    <i class="fa-solid fa-arrow-left mr-1"></i> Slide Sebelumnya
+                </button>
+                <div id="materi-interactive-status" class="text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg flex items-center gap-2">
+                    <i class="fa-solid fa-circle-notch animate-spin"></i> Selesaikan Pemantik di Bawah Teks
+                </div>
+                <button id="materi-next-btn" onclick="changeMateriSlide(1)" class="px-5 py-2.5 bg-rose-600 text-white font-bold rounded-xl text-sm hover:bg-rose-700 disabled:opacity-40 disabled:cursor-not-allowed transition shadow">
+                    Slide Berikutnya <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 7. LAYER MENU 2: BERMAIN                   -->
+    <!-- ========================================== -->
+    <section id="bermain-page" class="hidden flex-1 flex flex-col py-4 px-2 sm:px-4">
+        <div class="flex justify-between items-center mb-4 bg-white p-3 rounded-2xl shadow-sm border border-rose-100">
+            <button onclick="goToDashboard()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-2">
+                <i class="fa-solid fa-house"></i> Dashboard
+            </button>
+            <span class="text-xs font-extrabold text-rose-600 uppercase tracking-wide">
+                Tantangan Bermain (<span id="play-num">1</span>/10)
+            </span>
+            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">
+                Skor: <span id="play-score">0</span>
+            </span>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-xl p-5 sm:p-8 border border-rose-100 flex-1 flex flex-col justify-between max-w-4xl mx-auto w-full overflow-y-auto">
+            <div id="play-content-area" class="space-y-6"></div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+                <button id="play-next-btn" onclick="submitPlayAnswer()" class="px-6 py-3 bg-rose-600 text-white font-extrabold rounded-xl text-sm hover:bg-rose-700 transition shadow-lg active:scale-95">
+                    Jawab & Lanjut <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 8. LAYER MENU 3: BERLATIH                  -->
+    <!-- ========================================== -->
+    <section id="berlatih-page" class="hidden flex-1 flex flex-col py-4 px-2 sm:px-4">
+        <div class="flex justify-between items-center mb-4 bg-white p-3 rounded-2xl shadow-sm border border-rose-100">
+            <button onclick="goToDashboard()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs rounded-xl flex items-center gap-2">
+                <i class="fa-solid fa-house"></i> Dashboard
+            </button>
+            <div class="flex items-center gap-2">
+                <span id="quiz-level-badge" class="px-2.5 py-1 bg-purple-100 text-purple-700 font-bold text-xs rounded-full">
+                    Level 1: Dasar
+                </span>
+                <span class="text-xs font-extrabold text-rose-600 uppercase">
+                    Soal <span id="quiz-num">1</span>/10
+                </span>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-xl p-5 sm:p-8 border border-rose-100 flex-1 flex flex-col justify-between max-w-4xl mx-auto w-full overflow-y-auto">
+            <div id="quiz-content-area" class="space-y-6"></div>
+
+            <div class="mt-6 pt-4 border-t border-slate-100 flex justify-end">
+                <button id="quiz-next-btn" onclick="submitQuizAnswer()" class="px-6 py-3 bg-gradient-to-r from-rose-600 to-pink-600 text-white font-extrabold rounded-xl text-sm hover:from-rose-700 hover:to-pink-700 transition shadow-lg active:scale-95">
+                    Simpan & Lanjut <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========================================== -->
+    <!-- 9. REPORT & CERTIFICATE PAGE               -->
+    <!-- ========================================== -->
+    <section id="report-page" class="hidden flex-1 flex flex-col items-center py-6 px-4">
+        <div class="w-full max-w-4xl mb-4 flex justify-between items-center no-print">
+            <button onclick="goToDashboard()" class="px-4 py-2 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl hover:bg-slate-300">
+                <i class="fa-solid fa-house mr-1"></i> Kembali ke Dashboard
+            </button>
+            <div class="flex items-center gap-2">
+                <span id="sync-status" class="text-xs font-bold text-emerald-700 bg-emerald-100 px-3 py-1.5 rounded-xl hidden">
+                    <i class="fa-solid fa-cloud-arrow-up"></i> Data Tersimpan ke Database!
+                </span>
+                <button onclick="downloadPDFReport()" class="px-6 py-2.5 bg-emerald-600 text-white font-extrabold text-sm rounded-xl shadow-lg hover:bg-emerald-700 transition flex items-center gap-2">
+                    <i class="fa-solid fa-file-pdf"></i> Unduh / Cetak Laporan PDF
+                </button>
+            </div>
+        </div>
+
+        <!-- PDF PRINTABLE WRAPPER -->
+        <div id="pdf-report-container" class="bg-white p-8 rounded-3xl shadow-2xl border-2 border-rose-200 max-w-4xl w-full text-slate-800">
+            <div class="flex items-center justify-between border-b-4 border-rose-600 pb-4 mb-6">
+                <div class="flex items-center gap-4">
+                    <div class="w-16 h-16 bg-rose-600 text-white rounded-2xl flex items-center justify-center text-3xl font-black">
+                        <i class="fa-solid fa-kaaba"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-black text-slate-900 tracking-tight">MADRASAH TSANAWIYAH AL-KHAIRAAT BUNTULIA</h2>
+                        <p class="text-xs font-bold text-rose-600">Kabupaten Pohuwato, Provinsi Gorontalo</p>
+                        <p class="text-xs text-slate-500">Laporan Hasil Pembelajaran Interaktif Matematika Berbasis Cinta (KBC)</p>
+                    </div>
+                </div>
+                <div class="text-right text-xs text-slate-500">
+                    <p><strong>Pengembang:</strong> Fatra Polumulo, S.Pd</p>
+                    <p>Email: fatrapolumulo80@gmail.com</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 bg-rose-50 p-4 rounded-2xl mb-6 text-xs sm:text-sm">
+                <div>
+                    <p class="text-slate-500">Nama Siswa:</p>
+                    <p class="font-extrabold text-slate-800 text-base" id="report-student-name">-</p>
+                </div>
+                <div>
+                    <p class="text-slate-500">Kelas / Rombel:</p>
+                    <p class="font-bold text-slate-800" id="report-student-class">-</p>
+                </div>
+                <div>
+                    <p class="text-slate-500">Topik Materi:</p>
+                    <p class="font-bold text-slate-800">Bilangan Bulat, Rasional & Desimal</p>
+                </div>
+                <div>
+                    <p class="text-slate-500">Tanggal Pengerjaan:</p>
+                    <p class="font-bold text-slate-800" id="report-date">-</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+                <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-center">
+                    <p class="text-xs text-emerald-700 font-bold uppercase">Nilai Akhir Berlatih</p>
+                    <p class="text-4xl font-black text-emerald-800 my-1" id="report-final-score">0</p>
+                    <p class="text-xs font-bold text-emerald-600" id="report-predicate">Predikat: -</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-2xl border border-blue-200 text-center">
+                    <p class="text-xs text-blue-700 font-bold uppercase">Performa Bermain</p>
+                    <p class="text-4xl font-black text-blue-800 my-1" id="report-play-score">0/100</p>
+                    <p class="text-xs font-bold text-blue-600">Akurasi Gamifikasi</p>
+                </div>
+                <div class="bg-rose-50 p-4 rounded-2xl border border-rose-200 text-center">
+                    <p class="text-xs text-rose-700 font-bold uppercase">Kelulusan Modul</p>
+                    <p class="text-2xl font-extrabold text-rose-800 mt-3" id="report-status-badge">LUNAS KBC</p>
+                </div>
+            </div>
+
+            <div class="mb-6">
+                <h4 class="font-bold text-slate-800 text-sm mb-2 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-rose-600"></i> Analisis Penguasaan Level Asesmen:
+                </h4>
+                <table class="w-full text-xs text-left border-collapse border border-slate-200 rounded-xl overflow-hidden">
+                    <thead class="bg-rose-100 text-rose-900">
+                        <tr>
+                            <th class="p-2.5 border border-slate-200">Level Asesmen</th>
+                            <th class="p-2.5 border border-slate-200">Bobot Total</th>
+                            <th class="p-2.5 border border-slate-200">Poin Diperoleh</th>
+                            <th class="p-2.5 border border-slate-200">Status Capaian</th>
+                        </tr>
+                    </thead>
+                    <tbody id="report-breakdown-body"></tbody>
+                </table>
+            </div>
+
+            <div class="space-y-4 text-xs leading-relaxed">
+                <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200">
+                    <p class="font-bold text-amber-900 mb-1 flex items-center gap-1">
+                        <i class="fa-solid fa-heart text-rose-500"></i> Refleksi Kurikulum Berbasis Cinta (KBC Kemenag):
+                    </p>
+                    <p class="text-slate-700" id="report-kbc-note">
+                        "Alhamdulillah, ananda telah mempelajari keteraturan bilangan bulat sebagai cerminan keagungan ciptaan Allah di wilayah pegunungan Pohuwato. Tingkatkan selalu rasa cinta ilmu dan kepedulian terhadap kelestarian alam sekitar."
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 flex justify-between items-end">
+                    <div class="max-w-md">
+                        <p class="font-bold text-slate-800 mb-1">Rekomendasi & Catatan Guru Pembimbing:</p>
+                        <p class="text-slate-600 italic" id="report-teacher-rec">
+                            Tuntaskan seluruh latihan untuk mendapatkan catatan rekomendasi resmi dari Fatra Polumulo, S.Pd.
+                        </p>
+                    </div>
+                    <div class="text-center min-w-[160px]">
+                        <p class="text-slate-500 mb-8">Buntulia, <span id="report-footer-date">2026</span></p>
+                        <p class="font-bold text-slate-800 underline">Fatra Polumulo, S.Pd</p>
+                        <p class="text-[10px] text-slate-500">NIP. Guru Matematika MTs</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- JavaScript Application Logic -->
+<script>
+    // =========================================================================
+    // GOOGLE APPS SCRIPT WEB APP URL CONFIGURATION
+    // =========================================================================
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbzO-QDDN1WyOtlnvEQ3uEV_IH9mKLzKxV8lGg3DOYNZnJMIzZNeHXRaowBGCTR387dZYA/exec"; // Ganti dengan URL Web App Apps Script Anda
+
+    const state = {
+        student: {
+            name: '',
+            class: ''
+        },
+        unlocked: {
+            belajar: true,
+            bermain: false,
+            berlatih: false
+        },
+        materiIndex: 0,
+        materiCompleted: [false, false, false, false, false, false],
+        playIndex: 0,
+        playScore: 0,
+        playAnswers: [],
+        quizIndex: 0,
+        quizScore: 0,
+        quizAnswers: [],
+        levelScores: {
+            level1: 0,
+            level2: 0,
+            level3: 0
+        }
+    };
+
+    const materiData = [
+        {
+            title: "1. Mengenal Bilangan Bulat di Kawasan Pohuwato",
+            concept: "Bilangan bulat terdiri atas bilangan bulat positif, nol (0), dan bilangan bulat negatif. Di dunia nyata, bilangan negatif digunakan untuk menyatakan besaran di bawah titik acuan 0.",
+            localContext: "Kawasan perbukitan dan Gunung Pani di Kabupaten Pohuwato memiliki variasi ketinggian dan suhu. Jika titik nol adalah permukaan laut (0 meter), puncak Gunung Pani berada pada ketinggian positif (+1.500 m dpl), sedangkan kedalaman muara sungai berada pada bilangan negatif.",
+            kbc: "Cinta Kepada Kelestarian Alam: Memahami ketinggian dan suhu perbukitan Pohuwato mengajarkan kita untuk menyayangi alam dan tidak merusak hutan tambang Gunung Pani.",
+            quran: {
+                arabic: "إِنَّا كُلَّ شَيْءٍ خَلَقْنَاهُ بِقَدَرٍ",
+                verse: "QS. Al-Qamar: 49",
+                trans: "Sungguh, Kami menciptakan segala sesuatu menurut ukuran.",
+                tafsir: "Ketinggian gunung dan suhu udara merupakan bentuk ukuran presisi bilangan bulat yang dirancang Allah."
+            },
+            challenge: {
+                type: "mcq",
+                question: "Suhu udara di puncak pegunungan Pani Pohuwato pada malam hari mencapai 4 derajat di bawah 0°C. Penulisan bilangan bulat yang tepat adalah...",
+                options: ["A. +4", "B. -4", "C. 0.4"],
+                correct: 1,
+                explanation: "Besaran di bawah titik acuan 0 dinyatakan dengan tanda negatif (-4)."
+            }
+        },
+        {
+            title: "2. Garis Bilangan Bulat & Membandingkan Nilai",
+            concept: "Pada garis bilangan mendatar: semakin ke kanan posisi suatu bilangan, nilainya semakin besar. Semakin ke kiri, nilainya semakin kecil. Contoh: -10 lebih kecil dari -2, ditulis -10 < -2.",
+            localContext: "Petani di kawasan pegunungan Pani mengukur perubahan suhu. Suhu -5°C di bagian puncak lebih dingin (lebih kecil) dibanding suhu -2°C di lereng buatan Buntulia.",
+            kbc: "Cinta Moderasi & Keadilan: Menempatkan bilangan pada garisnya melatih kita bersikap adil dan seimbang dalam memandang perbedaan antar sesama.",
+            quran: {
+                arabic: "وَأَقِيمُوا الْوَزْنَ بِالْقِسْطِ وَلَا تُخْسِرُوا الْمِيزَانَ",
+                verse: "QS. Ar-Rahman: 9",
+                trans: "Dan tegakkanlah keseimbangan itu dengan adil dan janganlah kamu mengurangi timbangan.",
+                tafsir: "Garis bilangan mengajarkan ketelitian posisi nilai positif dan negatif tanpa merugikan nilai sebenarnya."
+            },
+            challenge: {
+                type: "mcq",
+                question: "Manakah pernyataan pembanding bilangan bulat berikut yang BENAR?",
+                options: ["A. -15 > -5", "B. -8 < -2", "C. -3 < -10"],
+                correct: 1,
+                explanation: "Pada garis bilangan, -8 berada di sebelah kiri -2, sehingga -8 < -2."
+            }
+        },
+        {
+            title: "3. Operasi Penjumlahan & Pengurangan Bilangan Bulat",
+            concept: "Penjumlahan dengan bilangan positif berarti bergerak ke kanan pada garis bilangan. Pengurangan atau penjumlahan dengan bilangan negatif berarti bergerak ke kiri.",
+            localContext: "Seorang peneliti lingkungan di Buntulia mendaki Gunung Pani sejauh 8 km (positif), kemudian turun kembali 3 km (negatif). Posisi peneliti sekarang adalah 8 + (-3) = 5 km dari titik awal.",
+            kbc: "Cinta Sesama Manusia: Hidup bertetangga di Pohuwato ibarat penjumlahan kebaikan. Setiap bantuan positif menambah kebahagiaan bersama.",
+            quran: {
+                arabic: "وَتَعَاوَنُوا عَلَى الْبِرِّ وَالتَّقْوَىٰ",
+                verse: "QS. Al-Ma'idah: 2",
+                trans: "Dan tolong-menolonglah kamu dalam (mengerjakan) kebajikan dan takwa...",
+                tafsir: "Menambah kebaikan melipatgandakan pahala positif dalam catatan amal manusia."
+            },
+            challenge: {
+                type: "mcq",
+                question: "Hasil dari (-12) + 7 adalah...",
+                options: ["A. -5", "B. 5", "C. -19"],
+                correct: 0,
+                explanation: "Bergerak dari -12 ke kanan sebanyak 7 langkah menghasilkan -5."
+            }
+        },
+        {
+            title: "4. Perkalian & Pembagian Bilangan Bulat",
+            concept: "Aturan tanda: Positif × Positif = Positif, Negatif × Negatif = Positif. Apabila dua bilangan berbeda tanda dikalikan/dibagi, hasilnya selalu Negatif.",
+            localContext: "Jika suhu di perbukitan Pohuwato turun berturut-turut sebesar 2°C setiap jam selama 4 jam, maka total perubahan suhu dapat ditulis: 4 × (-2°C) = -8°C.",
+            kbc: "Cinta Tanah Air: Menjaga konsistensi aturan positif-negatif mengajarkan kita kedisiplinan menaati aturan di NKRI.",
+            quran: {
+                arabic: "مَن جَاءَ بِالْحَسَنَةِ فَلَهُ عَشْرُ أَمْثَالِهَا",
+                verse: "QS. Al-An'am: 160",
+                trans: "Barangsiapa membawa amal yang baik, maka baginya (pahala) sepuluh kali lipat amalnya...",
+                tafsir: "Perkalian pahala kebaikan adalah bukti kasih sayang Allah yang melipatgandakan nilai positif."
+            },
+            challenge: {
+                type: "mcq",
+                question: "Hasil dari (-6) × (-8) adalah...",
+                options: ["A. -48", "B. +48", "C. -14"],
+                correct: 1,
+                explanation: "Negatif dikali negatif menghasilkan bilangan positif (+48)."
+            }
+        },
+        {
+            title: "5. Bilangan Rasional & Pecahan di Pohuwato",
+            concept: "Bilangan rasional adalah bilangan yang dapat dinyatakan dalam bentuk pecahan a/b di mana a dan b bilangan bulat dan b ≠ 0. Contoh: 1/2, 3/4, -2/5.",
+            localContext: "Masyarakat Al-khairaat Buntulia membagi hasil panen jagung di kaki gunung Pani. Dari 1 ton panen, 3/4 bagian disedekahkan dan disalurkan untuk kas madrasah.",
+            kbc: "Cinta Kebaikan & Sedekah: Membagi rizki dalam bentuk pecahan rasional mendidik jiwa pemurah dan peduli terhadap anak yatim.",
+            quran: {
+                arabic: "مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ",
+                verse: "QS. Al-Baqarah: 261",
+                trans: "Perumpamaan orang yang menginfakkan hartanya di jalan Allah seperti sebutir biji yang menumbuhkan tujuh tangkai...",
+                tafsir: "Pecahan bagian rizki yang diinfakkan tidak mengikis harta, melainkan melipatgandakan keberkahan."
+            },
+            challenge: {
+                type: "mcq",
+                question: "Bentuk pecahan sederhana dari 0,75 yang biasa digunakan dalam pembagian panen adalah...",
+                options: ["A. 1/2", "B. 3/4", "C. 4/3"],
+                correct: 1,
+                explanation: "0,75 sama dengan 75/100 yang disederhanakan menjadi 3/4."
+            }
+        },
+        {
+            title: "6. Bilangan Desimal & Konversi Refleksi",
+            concept: "Bilangan desimal adalah sistem bilangan basis 10 yang menggunakan tanda koma. Desimal dapat diubah ke pecahan dan sebaliknya.",
+            localContext: "Pengukuran kadar kemurnian air sungai di dekat pertambangan Gunung Pani Pohuwato menunjukkan angka 0,85 dari skala 1,0. Ini berarti 85/100 air masih dalam kondisi terjaga.",
+            kbc: "Cinta Ilmu & Kejujuran Reflektif: Menuliskan angka desimal hingga ketelitian koma melatih ketelitian serta kejujuran sains murid madrasah.",
+            quran: {
+                arabic: "وَإِن تَعُدُّوا نِعْمَةَ اللَّهِ لَا تُحْصُوهَا",
+                verse: "QS. Ibrahim: 34",
+                trans: "Dan jika kamu menghitung nikmat Allah, niscaya kamu tidak akan mampu menghitungnya...",
+                tafsir: "Angka desimal tak hingga menunjukkan betapa tak terbatasnya nikmat rahmat Allah pada manusia."
+            },
+            challenge: {
+                type: "mcq",
+                question: "Manakah bentuk desimal dari pecahan 2/5?",
+                options: ["A. 0,2", "B. 0,4", "C. 0,5"],
+                correct: 1,
+                explanation: "2 dibagi 5 sama dengan 0,4."
+            }
+        }
+    ];
+
+    const playData = [
+        {
+            num: 1,
+            stimulus: "Di kawasan perbukitan dan Gunung Pani, Kabupaten Pohuwato, petugas Badan Meteorologi melakukan pencatatan suhu udara harian. Pada pukul 06.00 pagi, suhu udara di puncak Gunung Pani tercatat 3°C di bawah nol. Sementara itu, pada pukul 12.00 siang, suhu udara meningkat naik sebesar 9°C karena teriknya sinar matahari yang menyinari kawasan pegunungan tersebut.",
+            question: "Berdasarkan stimulus di atas, berapakah suhu udara di puncak Gunung Pani pada pukul 12.00 siang?",
+            options: ["A. -12°C", "B. +6°C", "C. -6°C", "D. +12°C"],
+            correct: 1,
+            explanation: "Suhu awal = -3°C. Kenaikan = +9°C. Maka (-3) + 9 = +6°C."
+        },
+        {
+            num: 2,
+            stimulus: "Para santri MTs Al-khairaat Buntulia mengadakan kegiatan tadabur alam di lereng perbukitan Pohuwato. Kelompok A memulai penjelajahan dari titik posko utama (posisi 0 meter). Mereka berjalan naik melintasi jalur bukit sejauh 15 meter, lalu karena jalur terjal mereka memutuskan turun kembali sejauh 18 meter menuju alur sungai.",
+            question: "Berapakah posisi akhir Kelompok A relatif terhadap titik posko utama?",
+            options: ["A. -3 meter", "B. +33 meter", "C. +3 meter", "D. -33 meter"],
+            correct: 0,
+            explanation: "Posisi awal 0 + 15 - 18 = -3 meter (berada 3 meter di bawah posko utama)."
+        },
+        {
+            num: 3,
+            stimulus: "Sebagai bentuk rasa cinta lingkungan dan konservasi hutan di pegunungan Pani Pohuwato, pengurus madrasah menanam pohon mahoni secara bertahap. Minggu pertama berhasil ditanam 45 bibit pohon. Namun karena cuaca ekstrem, 12 bibit layu (-12). Pada minggu kedua, santri kembali menambah 30 bibit baru.",
+            question: "Berapakah jumlah total bibit pohon mahoni yang tumbuh hidup saat ini?",
+            options: ["A. 51 bibit", "B. 63 bibit", "C. 75 bibit", "D. 87 bibit"],
+            correct: 0,
+            explanation: "Total = 45 - 12 + 30 = 63 bibit tumbuh."
+        },
+        {
+            num: 4,
+            stimulus: "Dalam sebuah ayat Al-Qur'an diajarkan mengenai pentingnya ketepatan perhitungan. Guru matematika MTs Al-khairaat Buntulia memberikan tantangan mengurutkan bilangan bulat berikut dari yang nilainya TERKECIL ke yang TERBESAR: -15, 8, -20, 0, 5, -2.",
+            question: "Urutan bilangan bulat yang benar dari terkecil hingga terbesar adalah...",
+            options: [
+                "A. -20, -15, -2, 0, 5, 8",
+                "B. 0, -2, 5, 8, -15, -20",
+                "C. -15, -20, -2, 0, 5, 8",
+                "D. 8, 5, 0, -2, -15, -20"
+            ],
+            correct: 0,
+            explanation: "Semakin besar angka negatif, nilainya semakin kecil: -20 < -15 < -2 < 0 < 5 < 8."
+        },
+        {
+            num: 5,
+            stimulus: "Pada penambangan ramah lingkungan di Pohuwato, sebuah alat penggali tanah diturunkan ke kedalaman 24 meter di bawah permukaan bumi (-24 m). Alat tersebut kemudian dinaikkan setinggi 10 meter untuk mengambil sampel batuan.",
+            question: "Pada kedalaman berapa meter alat penggali tersebut berada sekarang?",
+            options: ["A. -34 meter", "B. -14 meter", "C. +14 meter", "D. +34 meter"],
+            correct: 1,
+            explanation: "Posisi = -24 + 10 = -14 meter."
+        },
+        {
+            num: 6,
+            stimulus: "Hasil panen kelapa di daerah pesisir Buntulia sebanyak 120 butir akan dibagikan kepada 4 keluarga kurang mampu secara merata sebagai wujud kepedulian sosial KBC. Masing-masing keluarga kemudian memberikan 5 butir kelapanya kepada tetangga terdekat.",
+            question: "Sisa butir kelapa yang dimiliki oleh setiap keluarga penerima pertama adalah...",
+            options: ["A. 25 butir", "B. 30 butir", "C. 20 butir", "D. 35 butir"],
+            correct: 0,
+            explanation: "Tiap keluarga dapat 120 / 4 = 30 butir. Dikurangi 5 = 25 butir."
+        },
+        {
+            num: 7,
+            stimulus: "Dalam suatu uji kelayakan air sungai di lereng Gunung Pani Pohuwato, ditemukan kandungan mineral rasional sebesar 3/5 gram per liter air. Guru meminta siswa mengubah bentuk pecahan rasional 3/5 ini ke dalam bentuk desimal.",
+            question: "Bentuk desimal dari 3/5 gram per liter adalah...",
+            options: ["A. 0,35", "B. 0,6", "C. 0,53", "D. 0,75"],
+            correct: 1,
+            explanation: "3 dibagi 5 = 0,6."
+        },
+        {
+            num: 8,
+            stimulus: "Seorang pedagang di Pasar Buntulia mengalami kerugian sebesar Rp 15.000 (-15.000) pada hari Senin. Pada hari Selasa, pedagang tersebut berhasil mendapatkan keuntungan sebesar Rp 45.000 (+45.000).",
+            question: "Berapakah total keuangan pedagang tersebut selama dua hari?",
+            options: ["A. Untung Rp 30.000", "B. Rugi Rp 30.000", "C. Untung Rp 60.000", "D. Rugi Rp 60.000"],
+            correct: 0,
+            explanation: "-15.000 + 45.000 = +30.000 (Untung Rp 30.000)."
+        },
+        {
+            num: 9,
+            stimulus: "Suatu kapal selam milik TNI AL sedang melakukan patroli di perairan Gorontalo pada posisi -50 meter di bawah permukaan laut. Kapal kemudian menyelam lebih dalam lagi sejauh 35 meter.",
+            question: "Posisi kedalaman kapal selam sekarang adalah...",
+            options: ["A. -15 meter", "B. -85 meter", "C. +85 meter", "D. -70 meter"],
+            correct: 1,
+            explanation: "Menyelam lebih dalam: (-50) - 35 = -85 meter."
+        },
+        {
+            num: 10,
+            stimulus: "Untuk melatih kepekaan rasa cinta ilmu, murid MTs Al-khairaat mengamati termometer digital. Pada pagi hari suhu tercatat -2°C. Pada siang hari suhu naik menjadi 14°C. Berapakah besar kenaikan suhu dari pagi hingga siang hari?",
+            question: "Selisih kenaikan suhu tersebut adalah...",
+            options: ["A. 12°C", "B. 16°C", "C. -16°C", "D. 14°C"],
+            correct: 1,
+            explanation: "Selisih = 14 - (-2) = 14 + 2 = 16°C."
+        }
+    ];
+
+    const quizData = [
+        {
+            num: 1,
+            level: 1,
+            levelTitle: "Level 1 - Pemahaman Dasar",
+            points: 8,
+            stimulus: "Kabupaten Pohuwato memiliki wilayah daratan dan perairan yang indah. Titik kedalaman laut di teluk Pohuwato dinyatakan dengan bilangan bulat negatif. Jika sebuah jangkar perahu nelayan berada pada posisi 12 meter di bawah permukaan laut, maka penulisan matematika yang tepat adalah...",
+            question: "Lambang bilangan bulat yang sesuai untuk pernyataan di atas adalah...",
+            options: ["A. +12", "B. -12", "C. 12/0", "D. 0,-12"],
+            correct: 1,
+            explanation: "Kedalaman di bawah permukaan laut bernilai negatif (-12)."
+        },
+        {
+            num: 2,
+            level: 1,
+            levelTitle: "Level 1 - Pemahaman Dasar",
+            points: 8,
+            stimulus: "Pada garis bilangan bulat mendatar, posisi angka 0 berada di tengah. Di sebelah kanan 0 terdapat bilangan bulat positif, dan di sebelah kiri terdapat bilangan bulat negatif. Guru meminta siswa membandingkan dua nilai suhu: -9°C dan -4°C.",
+            question: "Tanda perbandingan yang paling tepat untuk mengisi titik-titik (-9 ... -4) adalah...",
+            options: ["A. >", "B. <", "C. =", "D. ≥"],
+            correct: 1,
+            explanation: "-9 terletak lebih di kiri daripada -4 pada garis bilangan, sehingga -9 < -4."
+        },
+        {
+            num: 3,
+            level: 1,
+            levelTitle: "Level 1 - Pemahaman Dasar",
+            points: 8,
+            stimulus: "Siti mencatat perubahan suhu pada es batu untuk pembuatan es buah di kantin MTs Al-khairaat Buntulia. Mula-mula suhu es batu adalah -5°C. Setelah didiamkan beberapa menit di udara terbuka, suhu es batu naik sebesar 8°C.",
+            question: "Berapakah suhu es batu sekarang?",
+            options: ["A. -13°C", "B. +3°C", "C. -3°C", "D. +13°C"],
+            correct: 1,
+            explanation: "-5 + 8 = +3°C."
+        },
+        {
+            num: 4,
+            level: 2,
+            levelTitle: "Level 2 - Penerapan & Aplikasi",
+            points: 10,
+            stimulus: "Kawasan pertambangan rakyat di Gunung Pani Pohuwato memiliki beberapa tingkatan kedalaman sumur galian. Sumur A berada pada kedalaman -18 meter, Sumur B pada kedalaman -25 meter, dan Sumur C pada kedalaman -12 meter. Pemilik tambang ingin mengurutkan sumur dari yang PALING DANGKAL ke yang PALING DALAM.",
+            question: "Urutan nama sumur yang tepat dari yang paling dangkal adalah...",
+            options: [
+                "A. Sumur B, Sumur A, Sumur C",
+                "B. Sumur C, Sumur A, Sumur B",
+                "C. Sumur A, Sumur B, Sumur C",
+                "D. Sumur C, Sumur B, Sumur A"
+            ],
+            correct: 1,
+            explanation: "Paling dangkal artinya nilai negatif paling kecil (mendekati 0): Sumur C (-12m), Sumur A (-18m), Sumur B (-25m)."
+        },
+        {
+            num: 5,
+            level: 2,
+            levelTitle: "Level 2 - Penerapan & Aplikasi",
+            points: 10,
+            stimulus: "Seorang dermawan di Buntulia membagikan bantuan modal usaha untuk 5 UMKM terdampak bencana alam. Total dana bantuan yang disiapkan adalah Rp 7.500.000. Setiap pengusaha UMKM menerima bagian yang sama besar, lalu menyerahkan 1/10 bagian untuk kas masjid madrasah.",
+            question: "Berapa rupiah dana bersih yang diterima oleh masing-masing pengusaha UMKM?",
+            options: ["A. Rp 1.350.000", "B. Rp 1.500.000", "C. Rp 1.200.000", "D. Rp 1.400.000"],
+            correct: 0,
+            explanation: "Per UMKM = 7.500.000 / 5 = 1.500.000. Potongan 1/10 = 150.000. Bersih = 1.350.000."
+        },
+        {
+            num: 6,
+            level: 2,
+            levelTitle: "Level 2 - Penerapan & Aplikasi",
+            points: 10,
+            stimulus: "Dalam sebuah tes evaluasi matematika di MTs Al-khairaat Buntulia yang terdiri dari 20 soal, aturan penskoran ditetapkan sebagai berikut: Jawaban BENAR diberi nilai +5, jawaban SALAH diberi nilai -2, dan soal TIDAK DIJAWAB diberi nilai 0. Ahmad menjawab benar 14 soal, salah 4 soal, dan sisanya tidak dijawab.",
+            question: "Berapakah nilai total yang diperoleh Ahmad dalam tes tersebut?",
+            options: ["A. 62", "B. 70", "C. 66", "D. 58"],
+            correct: 0,
+            explanation: "Benar = 14 × 5 = 70. Salah = 4 × (-2) = -8. Kosong = 2 × 0 = 0. Total = 70 - 8 = 62."
+        },
+        {
+            num: 7,
+            level: 2,
+            levelTitle: "Level 2 - Penerapan & Aplikasi",
+            points: 10,
+            stimulus: "Data curah hujan harian di kawasan pesisir Pohuwato dicatat dalam bentuk desimal: Hari Senin 1,25 mm, Hari Selasa 0,85 mm, dan Hari Rabu 2,40 mm. Guru meminta murid menghitung total jumlah curah hujan selama tiga hari tersebut.",
+            question: "Berapa total curah hujan dalam bentuk pecahan desimal dan pecahan campuran?",
+            options: [
+                "A. 4,50 mm (4 ½ mm)",
+                "B. 4,25 mm (4 ¼ mm)",
+                "C. 4,75 mm (4 ¾ mm)",
+                "D. 5,00 mm (5 mm)"
+            ],
+            correct: 0,
+            explanation: "Total = 1,25 + 0,85 + 2,40 = 4,50 mm atau 4 ½ mm."
+        },
+        {
+            num: 8,
+            level: 3,
+            levelTitle: "Level 3 - Penalaran HOTS",
+            points: 12,
+            stimulus: "Kawasan Hutan Gunung Pani di Pohuwato mengalami perubahan suhu ekstrem akibat cuaca global. Tim peneliti mengamati bahwa setiap kenaikan ketinggian 200 meter dari permukaan laut, suhu udara turun sebesar 1,5°C. Jika suhu udara di pantai (0 m dpl) adalah 30°C, seorang pendaki mengukur suhu di pos Puncak Gunung Pani pada ketinggian 1.600 m dpl.",
+            question: "Berapakah suhu udara yang terukur di pos Puncak Gunung Pani tersebut?",
+            options: ["A. 18°C", "B. 22°C", "C. 12°C", "D. 15°C"],
+            correct: 0,
+            explanation: "Kenaikan = 1.600 / 200 = 8 kali. Penurunan suhu = 8 × 1,5°C = 12°C. Suhu puncak = 30°C - 12°C = 18°C."
+        },
+        {
+            num: 9,
+            level: 3,
+            levelTitle: "Level 3 - Penalaran HOTS",
+            points: 12,
+            stimulus: "Dua buah kapal nelayan tradisional Buntulia bergerak dari titik koordinat dermaga yang sama. Kapal A berlayar ke arah utara sejauh 45 km, sedangkan Kapal B berlayar ke arah selatan sejauh 30 km. Karena gelombang laut, Kapal A kemudian terseret kembali ke arah selatan sejauh 15 km.",
+            question: "Berapakah jarak terpendek antara Kapal A dan Kapal B sekarang?",
+            options: ["A. 60 km", "B. 75 km", "C. 45 km", "D. 90 km"],
+            correct: 0,
+            explanation: "Posisi Kapal A = +45 - 15 = +30 km (Utara). Posisi Kapal B = -30 km (Selatan). Jarak = 30 - (-30) = 60 km."
+        },
+        {
+            num: 10,
+            level: 3,
+            levelTitle: "Level 3 - Penalaran HOTS",
+            points: 12,
+            stimulus: "Sebuah program sedekah pohon kelestarian alam di MTs Al-khairaat Buntulia mengumpulkan dana dari 3 kelas. Kelas 7A mengumpulkan Rp 250.000, Kelas 7B mengumpulkan 1,2 kali lipat dari Kelas 7A, dan Kelas 7C mengumpulkan Rp 50.000 lebih sedikit dari Kelas 7B. Seluruh dana digunakan membeli bibit pohon seharga Rp 15.000 per bibit.",
+            question: "Berapakah jumlah bibit pohon yang dapat dibeli oleh gabungan ketiga kelas tersebut?",
+            options: ["A. 50 bibit", "B. 53 bibit", "C. 53,3 bibit", "D. 53 bibit utuh (sisa dana simpanan)"],
+            correct: 3,
+            explanation: "7A = 250.000. 7B = 1,2 × 250k = 300.000. 7C = 300k - 50k = 250.000. Total = 800.000. Bibit utuh = 800.000 / 15.000 = 53 bibit (sisa Rp 5.000)."
+        }
+    ];
+
+    const guideSlides = [
+        {
+            icon: "fa-book-open",
+            title: "1. Modul Belajar Interaktif",
+            text: "Pelajari 6 Slide Materi Mendalam mengenai Bilangan Bulat, Rasional, dan Desimal yang dikaitkan langsung dengan ekosistem Gunung Pani Pohuwato & Nilai Al-Qur'an. Selesaikan pemantik soal di setiap slide!"
+        },
+        {
+            icon: "fa-gamepad",
+            title: "2. Tantangan Bermain (Gamifikasi)",
+            text: "Setelah membaca materi, buka kunci Menu BERMAIN. Hadapi 10 tantangan literasi-numerasi berkonteks lokal Pohuwato untuk mengumpulkan skor terbaikmu!"
+        },
+        {
+            icon: "fa-certificate",
+            title: "3. Asesmen Berlatih & Cetak PDF",
+            text: "Tuntaskan 10 Soal Asesmen Berjenjang (Level 1, 2, 3 HOTS). Di akhir sesi, kamu dapat mengunduh Laporan Hasil Belajar resmi berformat PDF!"
+        }
+    ];
+    let currentGuideIndex = 0;
+
+    window.onload = function() {
+        setTimeout(() => {
+            const splash = document.getElementById('splash-screen');
+            splash.classList.add('opacity-0');
+            setTimeout(() => {
+                splash.classList.add('hidden');
+                document.getElementById('cover-page').classList.remove('hidden');
+            }, 700);
+        }, 1800);
+    };
+
+    function openModal(id) {
+        document.getElementById(id).classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+        document.getElementById(id).classList.add('hidden');
+    }
+
+    function goToIdentityForm() {
+        document.getElementById('cover-page').classList.add('hidden');
+        document.getElementById('identity-page').classList.remove('hidden');
+    }
+
+    function saveStudentIdentity(e) {
+        e.preventDefault();
+        const nameInput = document.getElementById('student-name').value.trim();
+        const classInput = document.getElementById('student-class').value;
+
+        if (!nameInput || !classInput) {
+            document.getElementById('form-error').classList.remove('hidden');
+            return;
+        }
+
+        state.student.name = nameInput;
+        state.student.class = classInput;
+
+        document.getElementById('guide-student-name').innerText = nameInput;
+        document.getElementById('dash-user-name').innerText = nameInput;
+        document.getElementById('dash-user-class').innerText = classInput;
+
+        document.getElementById('identity-page').classList.add('hidden');
+        document.getElementById('guide-page').classList.remove('hidden');
+        renderGuideSlide();
+    }
+
+    function renderGuideSlide() {
+        const slide = guideSlides[currentGuideIndex];
+        const container = document.getElementById('guide-slide-container');
+        
+        container.innerHTML = `
+            <div class="text-center w-full animate-fade-in py-4">
+                <div class="w-20 h-20 bg-rose-100 text-rose-600 rounded-3xl flex items-center justify-center mx-auto mb-4 text-3xl shadow">
+                    <i class="fa-solid ${slide.icon}"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-slate-800 mb-2">${slide.title}</h3>
+                <p class="text-slate-600 text-sm max-w-md mx-auto leading-relaxed">${slide.text}</p>
+            </div>
+        `;
+
+        document.getElementById('guide-step-indicator').innerText = `Slide ${currentGuideIndex + 1} dari ${guideSlides.length}`;
+        document.getElementById('guide-prev-btn').disabled = (currentGuideIndex === 0);
+        
+        const nextBtn = document.getElementById('guide-next-btn');
+        if (currentGuideIndex === guideSlides.length - 1) {
+            nextBtn.innerHTML = `Masuk ke Menu Utama <i class="fa-solid fa-circle-check ml-1"></i>`;
+            nextBtn.className = "px-5 py-2.5 bg-emerald-600 text-white font-bold rounded-xl hover:bg-emerald-700 text-sm transition shadow";
+        } else {
+            nextBtn.innerHTML = `Selanjutnya <i class="fa-solid fa-arrow-right ml-1"></i>`;
+            nextBtn.className = "px-5 py-2.5 bg-rose-600 text-white font-bold rounded-xl hover:bg-rose-700 text-sm transition shadow";
+        }
+    }
+
+    function changeGuideSlide(dir) {
+        currentGuideIndex += dir;
+        if (currentGuideIndex >= guideSlides.length) {
+            goToDashboard();
+        } else {
+            renderGuideSlide();
+        }
+    }
+
+    function goToDashboard() {
+        document.getElementById('guide-page').classList.add('hidden');
+        document.getElementById('belajar-page').classList.add('hidden');
+        document.getElementById('bermain-page').classList.add('hidden');
+        document.getElementById('berlatih-page').classList.add('hidden');
+        document.getElementById('report-page').classList.add('hidden');
+        
+        document.getElementById('dashboard-page').classList.remove('hidden');
+        updateDashboardLockUI();
+    }
+
+    function updateDashboardLockUI() {
+        const cardBermain = document.getElementById('card-bermain');
+        const statusBermain = document.getElementById('status-bermain');
+        const iconBoxBermain = document.getElementById('icon-box-bermain');
+        const btnBermain = document.getElementById('btn-bermain-ui');
+        const badgeBermain = document.getElementById('badge-bermain');
+
+        if (state.unlocked.bermain) {
+            cardBermain.className = "cursor-pointer bg-white rounded-3xl p-6 shadow-xl border-2 border-rose-300 hover:border-rose-500 transition transform hover:-translate-y-1 relative overflow-hidden group";
+            statusBermain.className = "absolute top-3 right-3 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full shadow";
+            statusBermain.innerHTML = `<i class="fa-solid fa-lock-open mr-1"></i> Terbuka`;
+            iconBoxBermain.className = "w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition";
+            btnBermain.className = "w-full bg-rose-600 text-white font-bold py-2.5 rounded-xl text-center text-sm shadow";
+            btnBermain.innerText = "Mulai Tantangan Bermain";
+            badgeBermain.className = "px-3 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-full flex items-center gap-1";
+            document.getElementById('icon-badge-bermain').className = "fa-solid fa-check";
+        }
+
+        const cardBerlatih = document.getElementById('card-berlatih');
+        const statusBerlatih = document.getElementById('status-berlatih');
+        const iconBoxBerlatih = document.getElementById('icon-box-berlatih');
+        const btnBerlatih = document.getElementById('btn-berlatih-ui');
+        const badgeBerlatih = document.getElementById('badge-berlatih');
+
+        if (state.unlocked.berlatih) {
+            cardBerlatih.className = "cursor-pointer bg-white rounded-3xl p-6 shadow-xl border-2 border-rose-300 hover:border-rose-500 transition transform hover:-translate-y-1 relative overflow-hidden group";
+            statusBerlatih.className = "absolute top-3 right-3 px-3 py-1 bg-emerald-500 text-white text-xs font-bold rounded-full shadow";
+            statusBerlatih.innerHTML = `<i class="fa-solid fa-lock-open mr-1"></i> Terbuka`;
+            iconBoxBerlatih.className = "w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center text-3xl mb-4 group-hover:scale-110 transition";
+            btnBerlatih.className = "w-full bg-rose-600 text-white font-bold py-2.5 rounded-xl text-center text-sm shadow";
+            btnBerlatih.innerText = "Mulai Soal Berlatih";
+            badgeBerlatih.className = "px-3 py-1 bg-emerald-100 text-emerald-800 font-bold rounded-full flex items-center gap-1";
+            document.getElementById('icon-badge-berlatih').className = "fa-solid fa-check";
+        }
+    }
+
+    function attemptNavigate(module) {
+        if (state.unlocked[module]) {
+            navigateToModule(module);
+        } else {
+            let msg = "";
+            if (module === 'bermain') {
+                msg = "Tantangan BERMAIN masih terkunci. Harap tuntaskan membaca seluruh 6 Slide Materi di Menu BELAJAR dan jawab pemantiknya!";
+            } else if (module === 'berlatih') {
+                msg = "Menu BERLATIH masih terkunci. Tuntaskan 10 tantangan di Menu BERMAIN terlebih dahulu!";
+            }
+            document.getElementById('locked-modal-msg').innerText = msg;
+            openModal('locked-modal');
+        }
+    }
+
+    function navigateToModule(module) {
+        document.getElementById('dashboard-page').classList.add('hidden');
+        if (module === 'belajar') {
+            document.getElementById('belajar-page').classList.remove('hidden');
+            renderMateriSlide();
+        } else if (module === 'bermain') {
+            document.getElementById('bermain-page').classList.remove('hidden');
+            renderPlayChallenge();
+        } else if (module === 'berlatih') {
+            document.getElementById('berlatih-page').classList.remove('hidden');
+            renderQuizQuestion();
+        }
+    }
+
+    function renderMateriSlide() {
+        const data = materiData[state.materiIndex];
+        const area = document.getElementById('materi-content-area');
+        const isCompleted = state.materiCompleted[state.materiIndex];
+
+        document.getElementById('materi-slide-num').innerText = state.materiIndex + 1;
+        document.getElementById('materi-progress-percent').innerText = `${Math.round(((state.materiIndex + 1) / 6) * 100)}%`;
+
+        area.innerHTML = `
+            <div class="space-y-5 animate-fade-in">
+                <h3 class="text-xl sm:text-2xl font-black text-slate-800 border-b pb-2">${data.title}</h3>
+
+                <div class="bg-rose-50/70 p-4 rounded-2xl border-l-4 border-rose-600 text-sm text-slate-700 leading-relaxed">
+                    <h4 class="font-bold text-rose-900 mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-atom text-rose-500"></i> Konsep Inti Matematika:
+                    </h4>
+                    <p>${data.concept}</p>
+                </div>
+
+                <div class="bg-amber-50/70 p-4 rounded-2xl border-l-4 border-amber-500 text-sm text-slate-700 leading-relaxed">
+                    <h4 class="font-bold text-amber-900 mb-1 flex items-center gap-2">
+                        <i class="fa-solid fa-mountain-sun text-amber-600"></i> Konteks Wilayah Pohuwato & Gunung Pani:
+                    </h4>
+                    <p>${data.localContext}</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 text-xs leading-relaxed">
+                        <h4 class="font-bold text-emerald-900 mb-1 flex items-center gap-1">
+                            <i class="fa-solid fa-heart text-rose-500"></i> Nilai Kurikulum Berbasis Cinta:
+                        </h4>
+                        <p class="text-slate-700">${data.kbc}</p>
+                    </div>
+
+                    <div class="bg-emerald-900 text-white p-4 rounded-2xl text-xs space-y-2">
+                        <div class="flex justify-between items-center text-emerald-300">
+                            <span class="font-bold uppercase tracking-wider">${data.quran.verse}</span>
+                            <i class="fa-solid fa-book-quran"></i>
+                        </div>
+                        <p class="arabic-text text-right text-base font-bold text-amber-300 my-1">${data.quran.arabic}</p>
+                        <p class="italic text-emerald-100">"${data.quran.trans}"</p>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 rounded-2xl bg-slate-50 border-2 ${isCompleted ? 'border-emerald-400' : 'border-rose-200'}">
+                    <h4 class="font-extrabold text-slate-800 text-sm mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-amber-500"></i> Tantangan Pemantik Slide (Wajib Dijawab):
+                    </h4>
+                    <p class="text-xs text-slate-700 mb-3 font-medium">${data.challenge.question}</p>
+                    
+                    <div class="space-y-2" id="pemantik-options-group">
+                        ${data.challenge.options.map((opt, idx) => `
+                            <button onclick="checkPemantikAnswer(${idx})" ${isCompleted ? 'disabled' : ''} 
+                                class="pemantik-btn w-full text-left p-3 rounded-xl border text-xs font-semibold transition ${isCompleted && idx === data.challenge.correct ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-white hover:bg-rose-100 border-slate-200 text-slate-800'}">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <div id="pemantik-feedback" class="${isCompleted ? '' : 'hidden'} mt-3 p-3 rounded-xl text-xs font-bold ${isCompleted ? 'bg-emerald-100 text-emerald-800' : ''}">
+                        ${isCompleted ? ' Jawaban Benar! ' + data.challenge.explanation : ''}
+                    </div>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('materi-prev-btn').disabled = (state.materiIndex === 0);
+        const nextBtn = document.getElementById('materi-next-btn');
+        const statusBox = document.getElementById('materi-interactive-status');
+
+        if (isCompleted) {
+            nextBtn.disabled = false;
+            statusBox.className = "text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg flex items-center gap-2";
+            statusBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> Pemantik Tuntas`;
+        } else {
+            nextBtn.disabled = true;
+            statusBox.className = "text-xs font-bold text-amber-600 bg-amber-50 px-3 py-1.5 rounded-lg flex items-center gap-2";
+            statusBox.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin"></i> Jawab Pemantik di Atas`;
+        }
+
+        if (state.materiIndex === 5 && isCompleted) {
+            nextBtn.innerHTML = `Selesai & Buka Menu Bermain <i class="fa-solid fa-lock-open ml-1"></i>`;
+        } else {
+            nextBtn.innerHTML = `Slide Berikutnya <i class="fa-solid fa-arrow-right ml-1"></i>`;
+        }
+    }
+
+    function checkPemantikAnswer(selectedIdx) {
+        const data = materiData[state.materiIndex];
+        const feedback = document.getElementById('pemantik-feedback');
+        const buttons = document.querySelectorAll('.pemantik-btn');
+
+        if (selectedIdx === data.challenge.correct) {
+            state.materiCompleted[state.materiIndex] = true;
+            feedback.className = "mt-3 p-3 rounded-xl text-xs font-bold bg-emerald-100 text-emerald-800 flex items-center gap-2 animate-fade-in";
+            feedback.innerHTML = `<i class="fa-solid fa-circle-check text-lg"></i> Jawaban Benar! ${data.challenge.explanation}`;
+            
+            buttons.forEach((btn, idx) => {
+                btn.disabled = true;
+                if (idx === selectedIdx) {
+                    btn.className = "pemantik-btn w-full text-left p-3 rounded-xl border text-xs font-semibold bg-emerald-600 text-white border-emerald-600";
+                }
+            });
+
+            document.getElementById('materi-next-btn').disabled = false;
+            const statusBox = document.getElementById('materi-interactive-status');
+            statusBox.className = "text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg flex items-center gap-2";
+            statusBox.innerHTML = `<i class="fa-solid fa-circle-check text-emerald-600"></i> Pemantik Tuntas`;
+
+            if (state.materiCompleted.every(val => val === true)) {
+                state.unlocked.bermain = true;
+            }
+        } else {
+            feedback.className = "mt-3 p-3 rounded-xl text-xs font-bold bg-red-100 text-red-700 flex items-center gap-2 animate-shake";
+            feedback.innerHTML = `<i class="fa-solid fa-circle-xmark text-lg"></i> Jawaban belum tepat. Coba baca kembali uraian materi di atas!`;
+            feedback.classList.remove('hidden');
+        }
+    }
+
+    function changeMateriSlide(dir) {
+        state.materiIndex += dir;
+        if (state.materiIndex >= 6) {
+            state.materiIndex = 5;
+            state.unlocked.bermain = true;
+            goToDashboard();
+        } else {
+            renderMateriSlide();
+        }
+    }
+
+    let selectedPlayOption = null;
+
+    function renderPlayChallenge() {
+        const data = playData[state.playIndex];
+        const area = document.getElementById('play-content-area');
+
+        document.getElementById('play-num').innerText = state.playIndex + 1;
+        document.getElementById('play-score').innerText = state.playScore;
+        selectedPlayOption = null;
+
+        area.innerHTML = `
+            <div class="space-y-4 animate-fade-in">
+                <div class="bg-rose-50 p-4 sm:p-5 rounded-2xl border border-rose-200 text-xs sm:text-sm text-slate-700 leading-relaxed shadow-inner">
+                    <div class="flex items-center gap-2 text-rose-700 font-bold mb-2">
+                        <i class="fa-solid fa-newspaper text-base"></i>
+                        <span>STIMULUS LITERASI & NUMERASI POHUWATO (#${data.num})</span>
+                    </div>
+                    <p>${data.stimulus}</p>
+                </div>
+
+                <h4 class="font-extrabold text-slate-800 text-sm sm:text-base pt-2">
+                    ${data.question}
+                </h4>
+
+                <div class="space-y-2.5">
+                    ${data.options.map((opt, idx) => `
+                        <button onclick="selectPlayOpt(${idx})" id="play-opt-${idx}" 
+                            class="play-opt-btn w-full text-left p-3.5 rounded-xl border-2 border-slate-200 hover:border-rose-400 bg-white text-xs sm:text-sm font-semibold transition flex items-center justify-between">
+                            <span>${opt}</span>
+                            <i class="fa-regular fa-circle text-slate-300 opt-icon"></i>
+                        </button>
+                    `).join('')}
+                </div>
+
+                <div id="play-feedback" class="hidden p-4 rounded-xl text-xs sm:text-sm font-bold"></div>
+            </div>
+        `;
+    }
+
+    function selectPlayOpt(idx) {
+        selectedPlayOption = idx;
+        document.querySelectorAll('.play-opt-btn').forEach((btn, i) => {
+            if (i === idx) {
+                btn.className = "play-opt-btn w-full text-left p-3.5 rounded-xl border-2 border-rose-600 bg-rose-50 text-rose-900 text-xs sm:text-sm font-bold flex items-center justify-between";
+                btn.querySelector('.opt-icon').className = "fa-solid fa-circle-dot text-rose-600 opt-icon";
+            } else {
+                btn.className = "play-opt-btn w-full text-left p-3.5 rounded-xl border-2 border-slate-200 bg-white text-xs sm:text-sm font-semibold flex items-center justify-between";
+                btn.querySelector('.opt-icon').className = "fa-regular fa-circle text-slate-300 opt-icon";
+            }
+        });
+    }
+
+    function submitPlayAnswer() {
+        if (selectedPlayOption === null) {
+            const fb = document.getElementById('play-feedback');
+            fb.className = "p-3 bg-amber-100 text-amber-800 rounded-xl text-xs font-bold block";
+            fb.innerText = "Pilihlah salah satu jawaban sebelum melanjutkan!";
+            return;
+        }
+
+        const data = playData[state.playIndex];
+        const isCorrect = (selectedPlayOption === data.correct);
+
+        if (isCorrect) {
+            state.playScore += 10;
+            document.getElementById('play-score').innerText = state.playScore;
+        }
+
+        state.playAnswers.push({
+            num: data.num,
+            pertanyaan: data.question,
+            jawabanSiswa: data.options[selectedPlayOption],
+            isCorrect: isCorrect
+        });
+
+        state.playIndex++;
+        if (state.playIndex >= 10) {
+            state.unlocked.berlatih = true;
+            goToDashboard();
+        } else {
+            renderPlayChallenge();
+        }
+    }
+
+    let selectedQuizOption = null;
+
+    function renderQuizQuestion() {
+        const data = quizData[state.quizIndex];
+        const area = document.getElementById('quiz-content-area');
+
+        document.getElementById('quiz-num').innerText = state.quizIndex + 1;
+        document.getElementById('quiz-level-badge').innerText = data.levelTitle;
+        selectedQuizOption = null;
+
+        area.innerHTML = `
+            <div class="space-y-4 animate-fade-in">
+                <div class="bg-purple-50 p-4 sm:p-5 rounded-2xl border border-purple-200 text-xs sm:text-sm text-slate-700 leading-relaxed">
+                    <div class="flex items-center justify-between text-purple-800 font-bold mb-2">
+                        <span class="flex items-center gap-2">
+                            <i class="fa-solid fa-file-signature text-base"></i>
+                            STIMULUS SOAL ASESMEN (#${data.num})
+                        </span>
+                        <span class="px-2.5 py-0.5 bg-purple-200 text-purple-900 rounded-full text-xs">
+                            Bobot: ${data.points} Poin
+                        </span>
+                    </div>
+                    <p>${data.stimulus}</p>
+                </div>
+
+                <h4 class="font-extrabold text-slate-800 text-sm sm:text-base pt-1">
+                    ${data.question}
+                </h4>
+
+                <div class="space-y-2.5">
+                    ${data.options.map((opt, idx) => `
+                        <button onclick="selectQuizOpt(${idx})" id="quiz-opt-${idx}" 
+                            class="quiz-opt-btn w-full text-left p-3.5 rounded-xl border-2 border-slate-200 hover:border-rose-400 bg-white text-xs sm:text-sm font-semibold transition flex items-center justify-between">
+                            <span>${opt}</span>
+                            <i class="fa-regular fa-circle text-slate-300 quiz-opt-icon"></i>
+                        </button>
+                    `).join('')}
+                </div>
+
+                <div id="quiz-feedback" class="hidden p-3 bg-amber-100 text-amber-800 rounded-xl text-xs font-bold"></div>
+            </div>
+        `;
+    }
+
+    function selectQuizOpt(idx) {
+        selectedQuizOption = idx;
+        document.querySelectorAll('.quiz-opt-btn').forEach((btn, i) => {
+            if (i === idx) {
+                btn.className = "quiz-opt-btn w-full text-left p-3.5 rounded-xl border-2 border-rose-600 bg-rose-50 text-rose-900 text-xs sm:text-sm font-bold flex items-center justify-between";
+                btn.querySelector('.quiz-opt-icon').className = "fa-solid fa-circle-dot text-rose-600 quiz-opt-icon";
+            } else {
+                btn.className = "quiz-opt-btn w-full text-left p-3.5 rounded-xl border-2 border-slate-200 bg-white text-xs sm:text-sm font-semibold flex items-center justify-between";
+                btn.querySelector('.quiz-opt-icon').className = "fa-regular fa-circle text-slate-300 quiz-opt-icon";
+            }
+        });
+    }
+
+    function submitQuizAnswer() {
+        if (selectedQuizOption === null) {
+            const fb = document.getElementById('quiz-feedback');
+            fb.innerText = "Mohon pilih salah satu jawaban sebelum menekan tombol Lanjut!";
+            fb.classList.remove('hidden');
+            return;
+        }
+
+        const data = quizData[state.quizIndex];
+        const isCorrect = (selectedQuizOption === data.correct);
+
+        if (isCorrect) {
+            state.quizScore += data.points;
+            if (data.level === 1) state.levelScores.level1 += data.points;
+            if (data.level === 2) state.levelScores.level2 += data.points;
+            if (data.level === 3) state.levelScores.level3 += data.points;
+        }
+
+        state.quizAnswers.push({
+            num: data.num,
+            level: data.level,
+            pertanyaan: data.question,
+            jawabanSiswa: data.options[selectedQuizOption],
+            kunci: data.options[data.correct],
+            pointsObtained: isCorrect ? data.points : 0,
+            isCorrect: isCorrect
+        });
+
+        state.quizIndex++;
+        if (state.quizIndex >= 10) {
+            showReportPage();
+            sendDataToGoogleSheets();
+        } else {
+            renderQuizQuestion();
+        }
+    }
+
+    // =========================================================================
+    // GOOGLE SHEETS DATA SYNC FUNCTION (FETCH TO GAS WEB APP)
+    // =========================================================================
+    function sendDataToGoogleSheets() {
+        if (GAS_URL === "URL_GAS_ANDA_DISINI" || !GAS_URL) {
+            console.warn("GAS_URL belum dikonfigurasi.");
+            return;
+        }
+
+        let benarCount = state.quizAnswers.filter(a => a.isCorrect).length + state.playAnswers.filter(a => a.isCorrect).length;
+        let salahCount = (10 - state.quizAnswers.filter(a => a.isCorrect).length) + (10 - state.playAnswers.filter(a => a.isCorrect).length);
+
+        let detailData = {
+            bermain: state.playAnswers,
+            berlatih: state.quizAnswers
+        };
+
+        let soalListPayload = [];
+        playData.forEach(p => {
+            soalListPayload.push({
+                kategori: "Bermain",
+                nomor: p.num,
+                pertanyaan: p.question,
+                opsiA: p.options[0] || "",
+                opsiB: p.options[1] || "",
+                opsiC: p.options[2] || "",
+                opsiD: p.options[3] || "",
+                kunci: p.options[p.correct] || ""
+            });
+        });
+        quizData.forEach(q => {
+            soalListPayload.push({
+                kategori: "Berlatih (Level " + q.level + ")",
+                nomor: q.num,
+                pertanyaan: q.question,
+                opsiA: q.options[0] || "",
+                opsiB: q.options[1] || "",
+                opsiC: q.options[2] || "",
+                opsiD: q.options[3] || "",
+                kunci: q.options[q.correct] || ""
+            });
+        });
+
+        const payload = {
+            type: "SYNC_ALL_DATA",
+            nama: state.student.name,
+            kelas: state.student.class,
+            jumlahBenar: benarCount,
+            jumlahSalah: salahCount,
+            skorBerlatih: state.quizScore,
+            skorBermain: state.playScore,
+            detailJawaban: JSON.stringify(detailData),
+            soalList: soalListPayload
+        };
+
+        fetch(GAS_URL, {
+            method: "POST",
+            mode: "no-cors",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload)
+        }).then(() => {
+            const syncBadge = document.getElementById('sync-status');
+            if (syncBadge) syncBadge.classList.remove('hidden');
+        }).catch(err => {
+            console.error("Gagal mengirim data ke Google Sheets:", err);
+        });
+    }
+
+    function showReportPage() {
+        document.getElementById('berlatih-page').classList.add('hidden');
+        document.getElementById('report-page').classList.remove('hidden');
+
+        const now = new Date();
+        const dateStr = now.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+        document.getElementById('report-student-name').innerText = state.student.name || "Nama Siswa";
+        document.getElementById('report-student-class').innerText = state.student.class || "Kelas VII";
+        document.getElementById('report-date').innerText = dateStr;
+        document.getElementById('report-footer-date').innerText = dateStr;
+
+        document.getElementById('report-final-score').innerText = state.quizScore;
+        document.getElementById('report-play-score').innerText = `${state.playScore}/100`;
+
+        let pred = "Cukup";
+        if (state.quizScore >= 85) pred = "Sangat Baik (A)";
+        else if (state.quizScore >= 70) pred = "Baik (B)";
+        else if (state.quizScore >= 60) pred = "Cukup (C)";
+        else pred = "Perlu Bimbingan (D)";
+        document.getElementById('report-predicate').innerText = `Predikat: ${pred}`;
+
+        const tbody = document.getElementById('report-breakdown-body');
+        tbody.innerHTML = `
+            <tr>
+                <td class="p-2.5 border border-slate-200 font-bold">Level 1 - Pemahaman Dasar (Soal 1-3)</td>
+                <td class="p-2.5 border border-slate-200">24 Poin</td>
+                <td class="p-2.5 border border-slate-200 font-bold text-rose-700">${state.levelScores.level1} Poin</td>
+                <td class="p-2.5 border border-slate-200 font-bold ${state.levelScores.level1 >= 16 ? 'text-emerald-600' : 'text-amber-600'}">
+                    ${state.levelScores.level1 >= 16 ? 'Tuntas Kuasai' : 'Perlu Penguatan'}
+                </td>
+            </tr>
+            <tr>
+                <td class="p-2.5 border border-slate-200 font-bold">Level 2 - Aplikasi & Penerapan (Soal 4-7)</td>
+                <td class="p-2.5 border border-slate-200">40 Poin</td>
+                <td class="p-2.5 border border-slate-200 font-bold text-rose-700">${state.levelScores.level2} Poin</td>
+                <td class="p-2.5 border border-slate-200 font-bold ${state.levelScores.level2 >= 30 ? 'text-emerald-600' : 'text-amber-600'}">
+                    ${state.levelScores.level2 >= 30 ? 'Tuntas Kuasai' : 'Perlu Penguatan'}
+                </td>
+            </tr>
+            <tr>
+                <td class="p-2.5 border border-slate-200 font-bold">Level 3 - Penalaran HOTS (Soal 8-10)</td>
+                <td class="p-2.5 border border-slate-200">36 Poin</td>
+                <td class="p-2.5 border border-slate-200 font-bold text-rose-700">${state.levelScores.level3} Poin</td>
+                <td class="p-2.5 border border-slate-200 font-bold ${state.levelScores.level3 >= 24 ? 'text-emerald-600' : 'text-amber-600'}">
+                    ${state.levelScores.level3 >= 24 ? 'Tuntas Kuasai' : 'Perlu Penguatan'}
+                </td>
+            </tr>
+        `;
+
+        let rec = "";
+        if (state.quizScore >= 80) {
+            rec = `Ananda ${state.student.name} menunjukkan penguasaan penalaran HOTS yang sangat luar biasa. Mampu menghubungkan konteks wilayah Gunung Pani Pohuwato dengan ketepatan operasi bilangan bulat secara reflektif. Pertahankan prestasi ini!`;
+        } else if (state.quizScore >= 60) {
+            rec = `Ananda ${state.student.name} telah memahami konsep dasar bilangan bulat dengan baik. Perlu latihan tambahan pada soal penalaran tingkat tinggi (Level 3 HOTS) untuk mengasah kecermatan numerasi.`;
+        } else {
+            rec = `Ananda ${state.student.name} disarankan membaca kembali 6 Slide Materi di Menu BELAJAR bersama pendampingan guru Fatra Polumulo, S.Pd agar konsep dasar lebih kokoh.`;
+        }
+        document.getElementById('report-teacher-rec').innerText = rec;
+    }
+
+    function downloadPDFReport() {
+        const element = document.getElementById('pdf-report-container');
+        const opt = {
+            margin:       [0.3, 0.3, 0.3, 0.3],
+            filename:     `Laporan_Matematika_${state.student.name || 'Siswa'}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+        };
+
+        if (typeof html2pdf !== 'undefined') {
+            html2pdf().set(opt).from(element).save().catch(err => {
+                window.print();
+            });
+        } else {
+            window.print();
+        }
+    }
+</script>
